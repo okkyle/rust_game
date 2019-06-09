@@ -13,6 +13,7 @@ use game_object::{ Player, GameObject, Astroid, Position };
 pub struct App {
     gl: GlGraphics,
     player: Player,
+    astroids: Vec<Astroid>,
 }
 
 impl App {
@@ -22,15 +23,22 @@ impl App {
         const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 0.0];
 
         let player = &self.player;
+        let astroids = &mut self.astroids;
 
         self.gl.draw(args.viewport(),|c, gl| {
             clear(BLACK, gl);
             player.render(&c, gl);
+            for astroid in astroids {
+                astroid.render(&c, gl);
+            }
         });
     }
 
     fn update(&mut self, args: &UpdateArgs) {
-       self.player.update(args.dt);
+        self.player.update(args.dt);
+        for astroid in &mut self.astroids {
+            astroid.update(args.dt);
+        }
     }
 
     fn input(&mut self, button: &Button, is_press: bool) {
@@ -88,8 +96,11 @@ fn main() {
             velocity: Position { x: 0.0, y: 0.0 },
             angle: 0.0,
             size: 40.0,
-        }
+        },
+        astroids: Vec::new(),
     };
+
+    app.astroids.push(Astroid::new());
 
     let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut window) {

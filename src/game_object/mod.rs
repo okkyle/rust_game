@@ -62,21 +62,16 @@ impl GameObject for Astroid {
         const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
         let radius = self.radius();
 
+        let body_shape = Rectangle::new_round_border(WHITE, radius, 1.0);
+
         let body_transform = ctxt.transform
             .trans(self.position.x, self.position.y)
             .trans(-radius, radius);
 
-        let gun_transform = ctxt.transform
-            .trans(self.position.x, self.position.y)
-            .trans(0.0, 2.0 * radius)
-            .rot_rad(self.angle)
-            .trans(0.0, -0.5 * radius);
-
-        rectangle(WHITE, [0.0, 0.0, self.size, radius], gun_transform, gl);
-        rectangle(WHITE, [0.0, 0.0, self.size, self.size], body_transform, gl);
+        body_shape.draw([0.0, 0.0, 1.0, 1.0], &ctxt.draw_state, body_transform, gl);
     }
     fn update(&mut self, dt: f64) {
-        const MOVESCALAR: f64 = 5.0;
+        const MOVESCALAR: f64 = 1.0;
         self.position.x += dt * self.velocity.x * MOVESCALAR;
         self.position.y += dt * self.velocity.y * MOVESCALAR;
     }
