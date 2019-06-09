@@ -111,8 +111,16 @@ fn main() {
             app.input(&d, false);
         }
 
+        // Conditional compiling for detecting mouse with Rust
+        #[cfg(target_os = "macos")]
         e.mouse_cursor(|[x, y]| {
             app.mouse_position_update(x, y);
         });
+
+        #[cfg(not(target_os = "macos"))]
+        e.mouse_cursor(|x, y| {
+            app.mouse_position_update(x, y);
+        });
+
     }
 }
