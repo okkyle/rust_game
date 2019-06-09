@@ -60,6 +60,10 @@ impl App {
                     Key::S => self.player.start_move(Position { x: 0.0, y: 1.0 }),
                     Key::A => self.player.start_move(Position { x: -1.0, y: 0.0 }),
                     Key::D => self.player.start_move(Position { x: 1.0, y: 0.0 }),
+                    Key::Space => self.bullets.push(Bullet::new(self.player.position.x + self.player.size / 2.0,
+                         self.player.position.y + self.player.size / 2.0, 
+                         self.player.angle, 
+                         Position { x: 100.0 * self.player.angle.cos(), y: 100.0 * self.player.angle.sin() })),
                     _ => (),
                 }
             }
