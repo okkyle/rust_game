@@ -1,10 +1,13 @@
 use opengl_graphics::{ GlGraphics };
 use graphics::{ Context };
 
+mod position;
 mod player;
+mod astroid;
 
+pub use position::Position;
 pub use player::Player;
-pub use player::Position;
+pub use astroid::Astroid;
 
 pub trait GameObject {
     fn position(&self) -> &Position;
@@ -22,6 +25,35 @@ pub trait GameObject {
 }
 
 impl GameObject for Player {
+    fn position(&self) -> &Position{ &self.position }
+    fn radius(&self) -> f64 { self.size / 2.0 }
+    fn render(&self, ctxt: &Context, gl: &mut GlGraphics) {
+        use graphics::*;
+        
+        const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
+        let radius = self.radius();
+
+        let body_transform = ctxt.transform
+            .trans(self.position.x, self.position.y)
+            .trans(-radius, radius);
+
+        let gun_transform = ctxt.transform
+            .trans(self.position.x, self.position.y)
+            .trans(0.0, 2.0 * radius)
+            .rot_rad(self.angle)
+            .trans(0.0, -0.5 * radius);
+
+        rectangle(WHITE, [0.0, 0.0, self.size, radius], gun_transform, gl);
+        rectangle(WHITE, [0.0, 0.0, self.size, self.size], body_transform, gl);
+    }
+    fn update(&mut self, dt: f64) {
+        const MOVESCALAR: f64 = 5.0;
+        self.position.x += dt * self.velocity.x * MOVESCALAR;
+        self.position.y += dt * self.velocity.y * MOVESCALAR;
+    }
+}
+
+impl GameObject for Astroid {
     fn position(&self) -> &Position{ &self.position }
     fn radius(&self) -> f64 { self.size / 2.0 }
     fn render(&self, ctxt: &Context, gl: &mut GlGraphics) {

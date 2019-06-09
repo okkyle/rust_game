@@ -1,7 +1,4 @@
-pub struct Position {
-    pub x: f64,
-    pub y: f64,
-}
+use super::position::Position;
 
 pub struct Player {
     pub position: Position,

@@ -6,9 +6,7 @@ use opengl_graphics::{ GlGraphics, OpenGL };
 
 mod game_object;
 
-use game_object::GameObject;
-use game_object::Position;
-use game_object::Player;
+use game_object::{ Player, GameObject, Astroid, Position };
 
 // structs
 
