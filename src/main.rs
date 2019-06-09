@@ -6,14 +6,13 @@ use opengl_graphics::{ GlGraphics, OpenGL };
 
 mod game_object;
 
-use game_object::{ Player, GameObject, Astroid, Position };
-
-// structs
+use game_object::{ Player, GameObject, Astroid, Position, Bullet };
 
 pub struct App {
     gl: GlGraphics,
     player: Player,
     astroids: Vec<Astroid>,
+    bullets: Vec<Bullet>,
 }
 
 impl App {
@@ -24,12 +23,16 @@ impl App {
 
         let player = &self.player;
         let astroids = &mut self.astroids;
+        let bullets = &mut self.bullets;
 
         self.gl.draw(args.viewport(),|c, gl| {
             clear(BLACK, gl);
             player.render(&c, gl);
             for astroid in astroids {
                 astroid.render(&c, gl);
+            }
+            for bullet in bullets {
+                bullet.render(&c, gl);
             }
         });
     }
@@ -38,6 +41,14 @@ impl App {
         self.player.update(args.dt);
         for astroid in &mut self.astroids {
             astroid.update(args.dt);
+        }
+        for bullet in &mut self.bullets {
+            bullet.update(args.dt);
+        }
+        self.astroids.retain(|astroid| astroid.alive == true);
+        self.bullets.retain(|astroid| astroid.alive == true);
+        while self.astroids.len() < 5 {
+            self.astroids.push(Astroid::new());
         }
     }
 
@@ -98,6 +109,7 @@ fn main() {
             size: 40.0,
         },
         astroids: Vec::new(),
+        bullets: Vec::new(),
     };
 
     app.astroids.push(Astroid::new());
@@ -120,7 +132,7 @@ fn main() {
             app.input(&d, false);
         }
 
-        // Conditional compiling for detecting mouse with Rust
+        // conditional compiling for detecting mouse
         #[cfg(target_os = "macos")]
         e.mouse_cursor(|[x, y]| {
             app.mouse_position_update(x, y);

@@ -4,10 +4,12 @@ use graphics::{ Context };
 mod position;
 mod player;
 mod astroid;
+mod bullet;
 
 pub use position::Position;
 pub use player::Player;
 pub use astroid::Astroid;
+pub use bullet::Bullet;
 
 pub trait GameObject {
     fn position(&self) -> &Position;
@@ -62,7 +64,7 @@ impl GameObject for Astroid {
         const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
         let radius = self.radius();
 
-        let body_shape = Rectangle::new_round_border(WHITE, radius, 1.0);
+        let body_shape = Rectangle::new_round_border(WHITE, 1.0, radius);
 
         let body_transform = ctxt.transform
             .trans(self.position.x, self.position.y)
@@ -74,5 +76,37 @@ impl GameObject for Astroid {
         const MOVESCALAR: f64 = 1.0;
         self.position.x += dt * self.velocity.x * MOVESCALAR;
         self.position.y += dt * self.velocity.y * MOVESCALAR;
+
+        if self.position.x <= 0.0 || self.position.x >= 800.0 || self.position.y <= 0.0 || self.position.y >= 600.0 {
+            self.alive = false;
+        }
+    }
+}
+
+impl GameObject for Bullet {
+    fn position(&self) -> &Position{ &self.position }
+    fn radius(&self) -> f64 { self.size / 2.0 }
+    fn render(&self, ctxt: &Context, gl: &mut GlGraphics) {
+        use graphics::*;
+        
+        const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
+        let radius = self.radius();
+
+        let body_shape = Rectangle::new_round_border(WHITE, 1.0, radius);
+
+        let body_transform = ctxt.transform
+            .trans(self.position.x, self.position.y)
+            .trans(-radius, radius);
+
+        body_shape.draw([0.0, 0.0, 1.0, 1.0], &ctxt.draw_state, body_transform, gl);
+    }
+    fn update(&mut self, dt: f64) {
+        const MOVESCALAR: f64 = 1.0;
+        self.position.x += dt * self.velocity.x * MOVESCALAR;
+        self.position.y += dt * self.velocity.y * MOVESCALAR;
+
+        if self.position.x <= 0.0 || self.position.x >= 800.0 || self.position.y <= 0.0 || self.position.y >= 600.0 {
+            self.alive = false;
+        }
     }
 }
