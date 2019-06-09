@@ -58,10 +58,11 @@ impl App {
                 if astroid.collides(bullet) {
                     astroid.alive = false;
                     bullet.alive = false;
-                    new_astroids.push(Astroid::new_sized(astroid.size / 5.0, astroid.position.x, astroid.position.y));
-                    new_astroids.push(Astroid::new_sized(astroid.size / 5.0, astroid.position.x, astroid.position.y));
-                    new_astroids.push(Astroid::new_sized(astroid.size / 5.0, astroid.position.x, astroid.position.y));
-                    new_astroids.push(Astroid::new_sized(astroid.size / 5.0, astroid.position.x, astroid.position.y));
+                    if astroid.size > 10.0 {
+                        for _ in 0..4 {
+                            new_astroids.push(Astroid::new_sized(astroid.size, astroid.position.x, astroid.position.y));
+                        }
+                    }
                 }
             }
         }

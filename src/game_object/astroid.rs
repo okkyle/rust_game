@@ -30,7 +30,7 @@ impl Astroid {
             position: Position { x: x + rng.gen_range(-20.0, 20.0), y: y + rng.gen_range(-20.0, 20.0) },
             velocity: Position { x: rng.gen_range(0.0, 10.0), y: rng.gen_range(0.0, 10.0) },
             angle: rng.gen_range(0.0, 6.283),
-            size: rng.gen_range(size / 10.0, size),
+            size: rng.gen_range(size / 5.0, size / 2.0),
             alive: true,
         };
 
