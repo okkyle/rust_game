@@ -9,3 +9,11 @@ piston = "*"
 piston2d-graphics = "*"
 pistoncore-glutin_window = "*"
 piston2d-opengl_graphics = "*"
+
+[[bin]]
+name = "rust"
+path = "src/main.rs"
+
+[[bin]]
+name = "server"
+path = "src/server.rs"
