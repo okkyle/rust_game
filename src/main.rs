@@ -111,7 +111,7 @@ fn main() {
             app.input(&d, false);
         }
 
-        e.mouse_cursor(|x, y| {
+        e.mouse_cursor(|[x, y]| {
             app.mouse_position_update(x, y);
         });
     }
