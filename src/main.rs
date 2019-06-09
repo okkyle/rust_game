@@ -50,6 +50,25 @@ impl App {
         while self.astroids.len() < 5 {
             self.astroids.push(Astroid::new());
         }
+
+        //TODO: quadtree hit detection
+        let mut new_astroids: Vec<Astroid> = Vec::new();
+        for astroid in &mut self.astroids {
+            for bullet in &mut self.bullets {
+                if astroid.collides(bullet) {
+                    astroid.alive = false;
+                    bullet.alive = false;
+                    new_astroids.push(Astroid::new_sized(astroid.size / 5.0, astroid.position.x, astroid.position.y));
+                    new_astroids.push(Astroid::new_sized(astroid.size / 5.0, astroid.position.x, astroid.position.y));
+                    new_astroids.push(Astroid::new_sized(astroid.size / 5.0, astroid.position.x, astroid.position.y));
+                    new_astroids.push(Astroid::new_sized(astroid.size / 5.0, astroid.position.x, astroid.position.y));
+                }
+            }
+        }
+
+        for astroid in new_astroids {
+            self.astroids.push(astroid);
+        }
     }
 
     fn input(&mut self, button: &Button, is_press: bool) {

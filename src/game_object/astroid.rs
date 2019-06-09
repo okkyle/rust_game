@@ -24,10 +24,10 @@ impl Astroid {
         astroid
     }
 
-    pub fn new_sized(size: f64) -> Astroid {
+    pub fn new_sized(size: f64, x: f64, y: f64) -> Astroid {
         let mut rng = rand::thread_rng();
         let astroid: Astroid = Astroid {
-            position: Position { x: rng.gen_range(0.0, 800.0), y: rng.gen_range(0.0, 600.0) },
+            position: Position { x: x + rng.gen_range(-20.0, 20.0), y: y + rng.gen_range(-20.0, 20.0) },
             velocity: Position { x: rng.gen_range(0.0, 10.0), y: rng.gen_range(0.0, 10.0) },
             angle: rng.gen_range(0.0, 6.283),
             size: rng.gen_range(size / 10.0, size),
