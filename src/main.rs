@@ -117,8 +117,13 @@ fn main() {
             app.mouse_position_update(x, y);
         });
 
-        #[cfg(not(target_os = "macos"))]
-        e.mouse_cursor(|x, y| {
+        #[cfg(target_os = "windows")]
+        e.mouse_cursor(|[x, y]| {
+            app.mouse_position_update(x, y);
+        });
+
+        #[cfg(target_os = "linux")]
+        e.mouse_cursor(|[x, y]| {
             app.mouse_position_update(x, y);
         });
 
